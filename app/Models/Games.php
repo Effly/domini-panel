@@ -33,10 +33,10 @@ class Games extends Model
     public function getDataGameById($id){
         return $this->where('id',$id)->first();
     }
-    public function updateGame($data,$tech_name)
+    public function updateGame($data,$tech_name,$path_ipad)
     {
         $game = $this->where('id',$data['id'])->first();
-
+//        dd($path_ipad);
         if (array_key_exists('image', $data)){
 //            Storage::disk('public')->delete($game->image_name);
             $game->update([
@@ -47,6 +47,7 @@ class Games extends Model
                 'platform'=>$data['platform'],
                 'link'=>$data['link'],
                 'image_name'=>$data['path'],
+                'image_name_ipad'=>$path_ipad,
                 'tech_name'=>$tech_name,
             ]);
         }else{
@@ -57,7 +58,7 @@ class Games extends Model
                 'version'=>$data['version'],
                 'platform'=>$data['platform'],
                 'link'=>$data['link'],
-
+                'image_name_ipad'=>$path_ipad,
                 'tech_name'=>$tech_name,]);
         }
 

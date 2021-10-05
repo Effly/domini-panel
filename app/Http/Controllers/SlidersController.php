@@ -28,10 +28,15 @@ class SlidersController extends Controller
             'hot_realese'=>Storage::disk('public')->exists('labels/hot_realese/hot_realese.png'),
             'friends_favorite'=>Storage::disk('public')->exists('labels/friends_favorite/friends_favorite.png'),
 
-            '15'=>Storage::disk('public')->exists('labels/15/15.png'),
-            '25'=>Storage::disk('public')->exists('labels/25/25.png'),
-            '30'=>Storage::disk('public')->exists('labels/30/30.png'),
-            '40'=>Storage::disk('public')->exists('labels/40/40.png'),
+            '15'=>Storage::disk('public')->exists('labels/15.png'),
+            '25'=>Storage::disk('public')->exists('labels/25.png'),
+            '30'=>Storage::disk('public')->exists('labels/30.png'),
+            '40'=>Storage::disk('public')->exists('labels/40.png'),
+            'free_small'=>Storage::disk('public')->exists('labels/free_small.png'),
+            'free_big'=>Storage::disk('public')->exists('labels/free_big.png'),
+            'free_big_ipad'=>Storage::disk('public')->exists('labels/free_big_ipad.png'),
+
+
         ];
 //        dd($slides[6]);
         return view('admin-panel.sliders', [
@@ -112,7 +117,7 @@ class SlidersController extends Controller
 
     public function updateLabel(Request $request)
     {
-        $path = Storage::disk('public')->putFileAs('labels/' . $request->label_name, $request->file('img'), $request->label_name . '.png');
+        $path = Storage::disk('public')->putFileAs('labels', $request->file('img'), $request->label_name . '.png');
         return redirect('/sliders')->with('update', 'The slide-label was successfully updated');
     }
 }

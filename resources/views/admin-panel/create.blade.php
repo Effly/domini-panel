@@ -9,31 +9,31 @@
     <div class="game_title row mb-3">
         <label class="col-sm-2 col-form-label" for="title">Game title</label>
         <div class="col-sm-10">
-            <input type="text" class="form-control" id="title" value="" name="title">
+            <input type="text" required class="form-control" id="title" value="" name="title">
         </div>
 
         <label class="col-sm-2 col-form-label" for="title">Game tech name</label>
         <div class="col-sm-10">
-            <input type="text" class="form-control" id="title" value="" name="tech_title">
+            <input type="text" required class="form-control" id="title" value="" name="tech_title">
         </div>
     </div>
     <fieldset class="platform row mb-3">
         <legend class="col-form-label col-sm-2 pt-0">Platform</legend>
         <div class="col-sm-10">
             <div class="form-check">
-                <input type="radio" value="ios" id="ios" name="platform">
+                <input type="radio" required value="ios" id="ios" name="platform">
 
                 <label for="ios">iOS</label>
             </div>
             <div class="form-check">
 
-                <input type="radio" value="android" id="android" name="platform">
+                <input type="radio" required value="android" id="android" name="platform">
 
                 <label for="android">Android</label>
             </div>
             <div class="form-check">
 
-                <input type="radio" value="amazone" id="amazone" name="platform">
+                <input type="radio" required value="amazone" id="amazone" name="platform">
 
                 <label for="amazone">Amazone</label>
             </div>
@@ -44,12 +44,12 @@
         <div class="col-sm-10">
             <div class="form-check">
 
-                <input type="radio" value="free" id="free" name="version">
+                <input type="radio" required value="free" id="free" name="version">
                 <label for="free">free</label>
             </div>
             <div class="form-check">
 
-                <input type="radio" value="premium" id="premium" name="version">
+                <input type="radio" required value="premium" id="premium" name="version">
                 <label for="premium">premium</label>
             </div>
         </div>
@@ -59,11 +59,11 @@
         <div class="col-sm-10">
             <div class="form-check">
 
-                <input type="radio" value="big" id="big" name="slider">
+                <input type="radio" required value="big" id="big" name="slider">
                 <label for="big">big</label>
             </div>
             <div class="form-check">
-                <input type="radio" value="small" id="small" name="slider">
+                <input type="radio" required value="small" id="small" name="slider">
                 <label for="small">small</label>
             </div>
         </div>
@@ -72,18 +72,18 @@
         <legend class="col-form-label col-sm-2 pt-0">Published</legend>
         <div class="col-sm-10">
             <div class="form-check">
-                <input type="radio" value="yes" id="yes" name="published">
+                <input type="radio" required value="yes" id="yes" name="published">
                 <label for="yes">yes</label>
             </div>
             <div class="form-check">
-                <input type="radio" value="no" id="no" name="published">
+                <input type="radio" required value="no" id="no" name="published">
                 <label for="no">no</label>
             </div>
         </div>
     </fieldset>
     <div class="image">
-        <label for="formFile" class="form-label image">File input</label>
-        <input class="form-control" name="image" type="file" id="image">
+        <label for="formFile"  class="form-label image">File input</label>
+        <input class="form-control" required name="image" type="file" id="image">
         <p class="validate">
 
         </p>
@@ -98,7 +98,7 @@
     <div class="game_title row mb-3">
         <label class="col-sm-2 col-form-label" for="title">Adjust link</label>
         <div class="col-sm-10">
-            <input type="text" class="form-control" id="link" value="" name="link">
+            <input type="text" required class="form-control" id="link" value="" name="link">
             <p class="validate_link">
 
             </p>
@@ -156,22 +156,6 @@
             }
         })
     })
-    let check_big = $("#big")
-    let check_small = $("#small")
-    let file_for_ipad = $("#block_image_for_ipad")
-    check_big.click(function () {
-        if ($(this).is(':checked')) {
-            // console.log('check')
-            file_for_ipad.fadeIn();
 
-        }
-    });
-    check_small.click(function (){
-        if ($(this).is(':checked')) {
-            file_for_ipad.fadeOut();
-            // console.log('nocheck')
-
-        }
-    })
 </script>
 @endsection

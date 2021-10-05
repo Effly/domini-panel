@@ -3,6 +3,7 @@
 @section('title','Edit')
 
 @section('body')
+{{--            {{dd(empty($data->image_name_ipad))}}--}}
     <form action="{{route('update')}}" class="card card-body" method="post" enctype="multipart/form-data">
         @csrf
         <div class="game_title row mb-3">
@@ -110,8 +111,8 @@
         </fieldset>
         <div class="image">
             @if(!empty($data->image_name) || $exist == true)
-                <img class="rounded mx-auto d-block img-fluid" src="{{asset('storage/'.$data->image_name)}}"
-                     alt="tech_name_img" class="image">
+                <img class="rounded image mx-auto d-block img-fluid" src="{{asset('storage/'.$data->image_name)}}"
+                     alt="tech_name_img">
             @endif
             <label for="formFile" class="form-label image">File input</label>
             <input class="form-control" name="image" type="file" id="image">
@@ -119,7 +120,17 @@
 
             </p>
         </div>
+        <div style="display: none" id="block_image_for_ipad" class="image">
+            @if(!empty($data->image_name_ipad))
+                <img class="rounded image mx-auto d-block img-fluid" src="{{asset('storage/'.$data->image_name_ipad)}}"
+                     alt="tech_name_img" >
+            @endif
+            <label for="formFile" class="form-label image">File input for Ipad</label>
+            <input class="form-control" name="image_for_ipad" type="file" id="image_for_ipad">
+            <p class="validate_ipad">
 
+            </p>
+        </div>
         <div class="game_title row mb-3">
             <label class="col-sm-2 col-form-label" for="title">Adjust link</label>
             <div class="col-sm-10">
@@ -144,47 +155,9 @@
 @endsection
 @section('script')
     <script>
-        let els = $("input[name=image]");
-        els.on("change", function () {
-            var fd = new FormData();
-            var files = els[0].files;
 
-            // Check file selected or not
-            if (files.length > 0) {
-                fd.append('image', files[0]);
+    let routeCheckImage = '{{route('image-check')}}'
+    let routeCheckLink = '{{route('link-check')}}'
 
-                $.ajax({
-                    url: '{{route('image-check')}}',
-                    type: 'post',
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    data: fd,
-                    contentType: false,
-                    processData: false,
-                    success: function (response) {
-                        $('.validate').html(response)
-                    }
-                })
-            }
-        })
-        let link = $("input[name=link]");
-        link.on("change", function () {
-            console.log(link)
-            $.ajax({
-                url: '{{route('link-check')}}',
-                type: 'post',
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                data: {
-                    link: link.val(),
-                },
-                success: function (response) {
-                    $('.validate_link').html(response)
-                    // console.log(response)
-                }
-            })
-        })
     </script>
 @endsection

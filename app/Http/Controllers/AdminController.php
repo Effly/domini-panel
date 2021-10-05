@@ -60,22 +60,27 @@ class AdminController extends Controller
     public function store(Request $request, Games $game)
     {
         $messages = [
-            'image.dimensions' => 'The image must have an aspect ratio of 1280x300',
-            'image.max' => 'The image must be no more than 2 megabytes in size',
+//            'image.dimensions' => 'The image must have an aspect ratio of 1280x300',
+//            'image.max' => 'The image must be no more than 2 megabytes in size',
         ];
         $rules = [
-            'image' => 'dimensions:min_width=1280,min_height=300|max:2048',
-            'image_for_ipad'=>'required_if:slider,big'
+//            'image' => 'dimensions:min_width=1280,min_height=300|max:2048',
+//            'image_for_ipad'=>'required_if:slider,big'
         ];
         $validator = Validator::make($request->all(), $rules, $messages);
-        dd($request->slider);
-        $errors = $validator->errors();
+        if ($validator->fails()) {
+            return back()
+                ->withErrors($validator)
+//                ->withInput()
+                ;
+        }
+
         $tech_name = $request->tech_title;
         $path = Storage::disk('public')->putFileAs('Images/' . $request->platform . '/' . $tech_name,$request->file('image'),$tech_name.'.png');
         if($request->hasFile('image_for_ipad')){
-            $path_ipad = Storage::disk('public')->putFileAs('Images/' . $request->platform . '/' . $tech_name,$request->file('image'),$tech_name.'_ipad.png');
+            $path_ipad = Storage::disk('public')->putFileAs('Images/' . $request->platform . '/' . $tech_name,$request->file('image_for_ipad'),$tech_name.'_ipad.png');
         }else $path_ipad = 'no';
-        $game->store_new_game($request->title, $request->platform, $request->version, $request->slider, $request->published, $request->link, $path, $tech_name,$path_ipad);
+        $res = $game->store_new_game($request->title, $request->platform, $request->version, $request->slider, $request->published, $request->link, $path, $tech_name,$path_ipad);
 
         return redirect('/admin')->with('create', 'The game with the name ' . $request->title . ' was successfully created');
     }
@@ -105,8 +110,26 @@ class AdminController extends Controller
      */
     public function update(Games $game, Request $request)
     {
+        $messages = [
+//            'image.dimensions' => 'The image must have an aspect ratio of 1280x300',
+//            'image.max' => 'The image must be no more than 2 megabytes in size',
+        ];
+        $rules = [
+//            'image' => 'dimensions:min_width=1280,min_height=300|max:2048',
+//            'image_for_ipad'=>'required_if:slider,big'
+        ];
+        $validator = Validator::make($request->all(), $rules, $messages);
+//        dd($request->slider);
+        $errors = $validator->errors();
+//        dd(!empty($errors));
+//        if (!empty($errors)){
+//            return back()->withErrors($validator);
+//        }
 
         $tech_name = $request->tech_title;
+        if($request->hasFile('image_for_ipad')){
+            $path_ipad = Storage::disk('public')->putFileAs('Images/' . $request->platform . '/' . $tech_name,$request->file('image_for_ipad'),$tech_name.'_ipad.png');
+        }else $path_ipad = 'no';
         $data = $request->all();
         if ($request->has('image')) {
             $path = Storage::disk('public')->putFileAs('Images/' . $request->platform . '/' . $tech_name ,$request->file('image'),$tech_name.'.png');
@@ -114,7 +137,7 @@ class AdminController extends Controller
         }
 //        dd($data);
         $name = $game->getName($request->id);
-        $game->updateGame($data, $tech_name);
+        $game->updateGame($data, $tech_name,$path_ipad);
         return redirect('/admin')->with('update', 'The game with the name ' . $name . ' was successfully updated');
     }
 

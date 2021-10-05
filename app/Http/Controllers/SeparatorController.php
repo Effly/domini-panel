@@ -15,11 +15,9 @@ class SeparatorController extends Controller
      */
     public function index(Separator $separator)
     {
-        $separator_html_text = $separator->where('id',1)->first()->html_text;
-        $separator_path_inst = $separator->where('id',1)->first()->path_inst_img;
-        $separator_path_facebook = $separator->where('id',1)->first()->path_facebook_img;
+        $separator = $separator->where('id',1)->first();
 //        dd($separator->html_text);
-        return view('admin-panel.separator',['separator'=>$separator_html_text,'path_inst_img'=>$separator_path_inst,'path_facebook_img'=>$separator_path_facebook]);
+        return view('admin-panel.separator',['separator'=>$separator]);
     }
 
     /**
@@ -62,9 +60,16 @@ class SeparatorController extends Controller
             $path = Storage::disk('public')->putFileAs('src',$request->file('facebook_image'),'facebook_image.svg');
             $data['path_facebook_img'] = $path;
         }
+        if ($request->has('inst_link')){
+            $data['inst_link'] = $request->inst_link;
+        }
+        if ($request->has('facebook_link')){
+            $data['facebook_link'] = $request->facebook_link;
+        }
         if ($request->has('data')){
             $data['html_text'] = $request->data;
         }
+
         $check = $separator->where('id',1)->update($data);
 //        dd($check);
         return redirect('/separator')->with('update', 'The separator was successfully updated');
