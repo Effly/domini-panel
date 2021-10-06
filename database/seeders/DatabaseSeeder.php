@@ -15,7 +15,16 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call(
+            SlidersSettingsSeeder::class
+        );
+        $this->call(
+            SlidesSeeder::class
+        );
+        $this->call(
             GamesSeeder::class
+        );
+        $this->call(
+            UserSeeder::class
         );
     }
 }
