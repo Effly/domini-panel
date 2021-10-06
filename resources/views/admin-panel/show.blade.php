@@ -156,8 +156,8 @@
 @section('script')
     <script>
 
-    let routeCheckImage = '{{route('image-check')}}'
-    let routeCheckLink = '{{route('link-check')}}'
+    let routeImageCheck = '{{route('image-check')}}'
+    let routeLinkCheck = '{{route('link-check')}}'
 
     </script>
 @endsection
