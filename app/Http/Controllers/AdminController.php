@@ -9,6 +9,7 @@ use App\Models\Games;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use GuzzleHttp\Client;
+use Illuminate\Validation\Rule;
 
 class AdminController extends Controller
 {
@@ -19,7 +20,7 @@ class AdminController extends Controller
      */
     public function index(Request $request, Games $games)
     {
-        $all_games = $games->all();
+        $all_games = $games->paginate(20);
         $path = Storage::disk()->url('Images');
 //        if(isset($request->value)) $all_games = $games->where('slider','big')->get();
         $platform = $request->platform;
@@ -27,6 +28,7 @@ class AdminController extends Controller
         $slider = $request->slider;
         $published = $request->published;
         $sort_date = $request->sort_date;
+        $search_text = $request->search_text;
 
         if ($request->ajax()) {
             $all_games = $games->when(!empty($platform), function ($query) use ($platform) {
@@ -39,9 +41,12 @@ class AdminController extends Controller
                 $query->whereIn('published', $published);
             })->when(!empty($sort_date), function ($query) use ($sort_date) {
                 if ($sort_date[0] == 'desc') $query->orderBy('updated_at', 'DESC');
-                elseif ($sort_date[0] == 'asc') $query->orderBy('updated_at', 'ASC');;
+                elseif ($sort_date[0] == 'asc') $query->orderBy('updated_at', 'ASC');
+            })->when(!empty($search_text), function ($query) use ($search_text) {
+                $query->where('name','LIKE','%'.$search_text[0]."%");
             })
-                ->get();
+                ->paginate(20);
+//                ->get();
 
 
             return view('layouts.games', ['all_games' => $all_games, 'path' => $path])->render();
@@ -60,27 +65,26 @@ class AdminController extends Controller
     public function store(Request $request, Games $game)
     {
         $messages = [
-//            'image.dimensions' => 'The image must have an aspect ratio of 1280x300',
-//            'image.max' => 'The image must be no more than 2 megabytes in size',
+            'image.dimensions' => 'The image must have an aspect ratio of 1280x300',
+            'image.max' => 'The image must be no more than 2 megabytes in size',
         ];
         $rules = [
-//            'image' => 'dimensions:min_width=1280,min_height=300|max:2048',
-//            'image_for_ipad'=>'required_if:slider,big'
+            'image' => 'dimensions:min_width=1280,min_height=300|max:2048',
+            'image_for_ipad' => 'required_if:slider,big'
         ];
         $validator = Validator::make($request->all(), $rules, $messages);
         if ($validator->fails()) {
             return back()
-                ->withErrors($validator)
-//                ->withInput()
+                ->withErrors($validator)//                ->withInput()
                 ;
         }
 
         $tech_name = $request->tech_title;
-        $path = Storage::disk('public')->putFileAs('Images/' . $request->platform . '/' . $tech_name,$request->file('image'),$tech_name.'.png');
-        if($request->hasFile('image_for_ipad')){
-            $path_ipad = Storage::disk('public')->putFileAs('Images/' . $request->platform . '/' . $tech_name,$request->file('image_for_ipad'),$tech_name.'_ipad.png');
-        }else $path_ipad = 'no';
-        $res = $game->store_new_game($request->title, $request->platform, $request->version, $request->slider, $request->published, $request->link, $path, $tech_name,$path_ipad);
+        $path = Storage::disk('public')->putFileAs('Images/' . $request->platform . '/' . $tech_name, $request->file('image'), $tech_name . '.png');
+        if ($request->hasFile('image_for_ipad')) {
+            $path_ipad = Storage::disk('public')->putFileAs('Images/' . $request->platform . '/' . $tech_name, $request->file('image_for_ipad'), $tech_name . '_ipad.png');
+        } else $path_ipad = 'no';
+        $res = $game->store_new_game($request->title, $request->platform, $request->version, $request->slider, $request->published, $request->link, $path, $tech_name, $path_ipad);
 
         return redirect('/admin')->with('create', 'The game with the name ' . $request->title . ' was successfully created');
     }
@@ -104,40 +108,47 @@ class AdminController extends Controller
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param int $id
+     * @param \App\Models\Games $game
      * @return \Illuminate\Http\Response
      * @throws \Illuminate\Validation\ValidationException
      */
     public function update(Games $game, Request $request)
     {
         $messages = [
-//            'image.dimensions' => 'The image must have an aspect ratio of 1280x300',
-//            'image.max' => 'The image must be no more than 2 megabytes in size',
+            'image.dimensions' => 'The image does not match the aspect ratio for the selected slider',
+            'image.max' => 'The image must be no more than 2 megabytes in size',
+            'image_for_ipad.dimensions' => 'The image for ipad does not match the aspect ratio 1248x400.',
+            'image_for_ipad.max' => 'The image must be no more than 2 megabytes in size',
         ];
         $rules = [
-//            'image' => 'dimensions:min_width=1280,min_height=300|max:2048',
-//            'image_for_ipad'=>'required_if:slider,big'
+            'image_for_ipad' => 'required_if:slider,big|dimensions:width=1248,height=400|max:2048',
+//            'image'=>'required_if:slider,big|dimensions:min_width=1920,min_height=400|max:2048',
         ];
         $validator = Validator::make($request->all(), $rules, $messages);
-//        dd($request->slider);
-        $errors = $validator->errors();
-//        dd(!empty($errors));
-//        if (!empty($errors)){
-//            return back()->withErrors($validator);
-//        }
+        $validator->sometimes('image', 'required|dimensions:width=1920,height=400|max:2048', function ($input) {
+            return $input->slider == 'big';
+        });
+        $validator->sometimes('image', 'required|dimensions:width=470,height=300|max:2048', function ($input) {
+            return $input->slider == 'small';
+        });
+        if ($validator->fails()) {
+            return back()
+                ->withErrors($validator)
+                ->withInput();
+        }
 
         $tech_name = $request->tech_title;
-        if($request->hasFile('image_for_ipad')){
-            $path_ipad = Storage::disk('public')->putFileAs('Images/' . $request->platform . '/' . $tech_name,$request->file('image_for_ipad'),$tech_name.'_ipad.png');
-        }else $path_ipad = 'no';
+        if ($request->hasFile('image_for_ipad')) {
+            $path_ipad = Storage::disk('public')->putFileAs('Images/' . $request->platform . '/' . $tech_name, $request->file('image_for_ipad'), $tech_name . '_ipad.png');
+        } else $path_ipad = 'no';
         $data = $request->all();
         if ($request->has('image')) {
-            $path = Storage::disk('public')->putFileAs('Images/' . $request->platform . '/' . $tech_name ,$request->file('image'),$tech_name.'.png');
+            $path = Storage::disk('public')->putFileAs('Images/' . $request->platform . '/' . $tech_name, $request->file('image'), $tech_name . '.png');
             $data['path'] = $path;
         }
 //        dd($data);
         $name = $game->getName($request->id);
-        $game->updateGame($data, $tech_name,$path_ipad);
+        $game->updateGame($data, $tech_name, $path_ipad);
         return redirect('/admin')->with('update', 'The game with the name ' . $name . ' was successfully updated');
     }
 
@@ -162,18 +173,27 @@ class AdminController extends Controller
 
     public function imageCheck(Request $request)
     {
-//        dd($request->hasFile('image'));
+//        dd($request->all());
         $messages = [
-            'image.dimensions' => 'The image must have an aspect ratio of 1280x300',
+            'image.dimensions' => 'The image does not match the aspect ratio for the selected slider',
             'image.max' => 'The image must be no more than 2 megabytes in size',
+            'image_for_ipad.dimensions' => 'The image for ipad does not match the aspect ratio 1248x400.',
+            'image_for_ipad.max' => 'The image must be no more than 2 megabytes in size',
         ];
         $rules = [
-            'image' => 'dimensions:min_width=1280,min_height=300|max:2048'
+            'image_for_ipad' => 'dimensions:width=1248,height=400|max:2048'
         ];
         $validator = Validator::make($request->all(), $rules, $messages);
+        $validator->sometimes('image', 'dimensions:width=1920,height=400|max:2048', function ($input) {
+            return $input->slider == 'big';
+        });
+        $validator->sometimes('image', 'dimensions:width=470,height=300|max:2048', function ($input) {
+
+            return $input->slider == 'small';
+        });
 
         $errors = $validator->errors();
-//        dd($errors);
+//        dd($validator->errors());
         if (!empty($errors)) return view('layouts.success', ['errors' => $errors])->render();
     }
 
@@ -186,18 +206,18 @@ class AdminController extends Controller
                 'Content-Type' => 'application/x-www-form-urlencoded'
             ],
             'verify' => false,
-            'http_errors'=> true
+            'http_errors' => true
         ]);
 
 //        $response = $client->get('https://laravel.com/87543');
         try {
             $client->request('GET', $link);
-            return view('layouts.link',['error'=>'no error']);
+            return view('layouts.link', ['error' => 'no error']);
         } catch (ClientException $e) {
 
             $error = $e->getCode();
 //            dd($error);
-            return view('layouts.link',['error'=>$error]);
+            return view('layouts.link', ['error' => $error]);
 
         }
     }
