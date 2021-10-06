@@ -114,48 +114,8 @@
 
 @section('script')
 <script>
-    let els = $("input[name=image]");
-    els.on("change", function () {
-        var fd = new FormData();
-        var files = els[0].files;
-
-        // Check file selected or not
-        if (files.length > 0) {
-            fd.append('image', files[0]);
-
-            $.ajax({
-                url: '{{route('image-check')}}',
-                type: 'post',
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                data: fd,
-                contentType: false,
-                processData: false,
-                success: function (response) {
-                    $('.validate').html(response)
-                }
-            })
-        }
-    })
-    let link = $("input[name=link]");
-    link.on("change", function () {
-        console.log(link)
-        $.ajax({
-            url: '{{route('link-check')}}',
-            type: 'post',
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            data: {
-                link: link.val(),
-            },
-            success: function (response) {
-                $('.validate_link').html(response)
-                // console.log(response)
-            }
-        })
-    })
+    let routeLinkCheck = '{{route('link-check')}}'
+    let routeImageCheck = '{{route('image-check')}}'
 
 </script>
 @endsection
