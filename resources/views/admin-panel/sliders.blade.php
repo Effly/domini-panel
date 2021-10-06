@@ -7,12 +7,19 @@
     <h2>
         <form action="{{route('update-speed')}}" method="post">
             @csrf
-            big
-            <input type="text" name="speed" value="{{$speed_big}}" class="text">
+            <fieldset class="row mb-3 d-flex align-items-center">
+                <legend class="col-form-label col-sm-2 pt-0">Big:</legend>
+                <div class="col-sm-10 d-flex align-items-center">
+                    <div class="input-group form-check">
+                        <input type="text" name="speed" value="{{$speed_big}}" id="speed_big" class="text form-control">
+                        <input class="btn d-flex btn-primary" type="submit" value="Submit">
+                    </div>
+                </div>
+            </fieldset>
             <input type="hidden" name="slider" value="big">
-            <input class="btn btn-primary" type="submit" value="Submit">
         </form>
     </h2>
+
 
     <div class="sort row row-cols-1 row-cols-md-3 g-4" style="border-bottom: #1a202c 1px solid">
         <div class="col">
@@ -49,7 +56,7 @@
                                 @endif
                             </select>
                             @if($first_big->label_img_path != NULL)
-                                <img class="img-fluid" src="{{asset('storage/'.$first_small->label_img_path)}}" alt="">
+                                <img class="img-fluid" src="{{asset('storage/'.$first_big->label_img_path)}}" alt="">
                             @endif
                         </div>
                         <input type="hidden" value="first_big" name="slide">
@@ -147,14 +154,22 @@
             </div>
         </div>
     </div>
-
+    <br>
+    <br>
+    <br>
     <h2>
         <form action="{{route('update-speed')}}" method="post">
             @csrf
-            small
-            <input type="text" name="speed" value="{{$speed_small}}" class="text">
-            <input type="hidden" name="slider" value="small">
-            <input class="btn btn-primary" type="submit" value="Submit">
+            <fieldset class="row mb-3 d-flex align-items-center">
+                <legend class="col-form-label col-sm-2 pt-0">Small:</legend>
+                <div class="col-sm-10 ">
+                    <div class="form-check  input-group form-check">
+                        <input type="text" name="speed" value="{{$speed_small}}" id="speed_big"
+                               class="text form-control">
+                        <input class="btn btn-primary" type="submit" value="Submit">
+                    </div>
+                </div>
+            </fieldset>
         </form>
     </h2>
     <div class="sort row row-cols-1 row-cols-md-3 g-4" style="border-bottom: #1a202c 1px solid">
@@ -211,6 +226,11 @@
                                 @else
                                     <option value="NULL">not selected</option>
                                 @endif
+                                @if($first_small->rate == 'free_small')
+                                    <option selected value="free_small">free</option>
+                                @else
+                                    <option value="free_small">free</option>
+                                @endif
                                 @if($first_small->rate == 15)
                                     <option selected value="15">-15%</option>
                                 @else
@@ -266,7 +286,11 @@
                         <div class="mb-3">
                             <label for="label" class="form-label">Choose label:</label>
                             <select class="form-select" name="label" id="label">
-                                <option>not selected</option>
+                                @if($second_small->label == NULL)
+                                    <option selected value="NULL">not selected</option>
+                                @else
+                                    <option value="NULL">not selected</option>
+                                @endif
                                 @if($second_small->label == 'top_rated')
                                     <option selected value="top_rated">top rated</option>
                                 @else
@@ -291,6 +315,11 @@
                                     <option selected value="NULL">not selected</option>
                                 @else
                                     <option value="NULL">not selected</option>
+                                @endif
+                                @if($second_small->rate == 'free_small')
+                                    <option selected value="free_small">free</option>
+                                @else
+                                    <option value="free_small">free</option>
                                 @endif
                                 @if($second_small->rate == 15)
                                     <option selected value="15">-15%</option>
@@ -347,7 +376,11 @@
                         <div class="mb-3">
                             <label for="label" class="form-label">Choose label:</label>
                             <select class="form-select" name="label" id="label">
-                                <option>not selected</option>
+                                @if($third_small->label == NULL)
+                                    <option selected value="NULL">not selected</option>
+                                @else
+                                    <option value="NULL">not selected</option>
+                                @endif
                                 @if($third_small->label == 'top_rated')
                                     <option selected value="top_rated">top rated</option>
                                 @else
@@ -372,6 +405,11 @@
                                     <option selected value="NULL">not selected</option>
                                 @else
                                     <option value="NULL">not selected</option>
+                                @endif
+                                @if($third_small->rate == 'free_small')
+                                    <option selected value="free_small">free</option>
+                                @else
+                                    <option value="free_small">free</option>
                                 @endif
                                 @if($third_small->rate == 15)
                                     <option selected value="15">-15%</option>
@@ -427,7 +465,12 @@
                         <div class="mb-3">
                             <label for="label" class="form-label">Choose label:</label>
                             <select class="form-select" name="label" id="label">
-                                <option>not selected</option>
+
+                                @if($fourth_small->label == NULL)
+                                    <option selected value="NULL">not selected</option>
+                                @else
+                                    <option value="NULL">not selected</option>
+                                @endif
                                 @if($fourth_small->label == 'top_rated')
                                     <option selected value="top_rated">top rated</option>
                                 @else
@@ -452,6 +495,11 @@
                                     <option selected value="NULL">not selected</option>
                                 @else
                                     <option value="NULL">not selected</option>
+                                @endif
+                                @if($fourth_small->rate == 'free_small')
+                                    <option selected value="free_small">free</option>
+                                @else
+                                    <option value="free_small">free</option>
                                 @endif
                                 @if($fourth_small->rate == 15)
                                     <option selected value="15">-15%</option>
@@ -508,7 +556,11 @@
                         <div class="mb-3">
                             <label for="label" class="form-label">Choose label:</label>
                             <select class="form-select" name="label" id="label">
-                                <option selected value="NULL">not selected</option>
+                                @if($fifth_small->label == NULL)
+                                    <option selected value="NULL">not selected</option>
+                                @else
+                                    <option value="NULL">not selected</option>
+                                @endif
                                 @if($fifth_small->label == 'top_rated')
                                     <option selected value="top_rated">top rated</option>
                                 @else
@@ -527,12 +579,17 @@
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label for="rate" class="form-label">Choose label:</label>
+                            <label for="rate" class="form-label">Choose rate:</label>
                             <select class="form-select" name="rate" id="rate">
                                 @if($fifth_small->rate == NULL)
                                     <option selected value="NULL">not selected</option>
                                 @else
                                     <option value="NULL">not selected</option>
+                                @endif
+                                @if($fifth_small->rate == 'free_small')
+                                    <option selected value="free_small">free</option>
+                                @else
+                                    <option value="free_small">free</option>
                                 @endif
                                 @if($fifth_small->rate == 15)
                                     <option selected value="15">-15%</option>
@@ -567,6 +624,9 @@
             </div>
         </div>
     </div>
+    <br>
+    <br>
+    <br>
     <h2>
         label settings
     </h2>
