@@ -78,7 +78,8 @@
                                 @if(!empty($data_for_big))
                                     @foreach($data_for_big as $slide)
                                         <div class="main__wrapper-content-slider">
-                                            <a class="d-block link_img" href="{{$slide['game']['link']}}" target="_blank">
+                                            <a class="d-block link_img" href="{{$slide['game']['link']}}"
+                                               target="_blank">
                                                 @if($version)
                                                     <img src="{{asset('storage/'.$slide['game']['image_name_ipad'])}}"
                                                          alt="Img">
@@ -99,6 +100,7 @@
                                             </a>
                                         </div>
                                     @endforeach
+
                                 @endif
                             </div>
                         </article>
@@ -139,7 +141,7 @@
                                                          src="{{asset('storage/labels/'.$slide['rate'].'.png')}}"
                                                          alt="Img">
                                                 @endif
-                                                @if($slide['label']!= "not selected")
+                                                @if($slide['label']!= "NULL")
                                                     <img class="label img-fluid"
                                                          src="{{asset('storage/labels/'.$slide['label'].'.png')}}"
                                                          alt="Img">
@@ -159,7 +161,63 @@
     </div>
 </div>
 <script src="{{asset('js/script.js')}}"></script>
-
+<script>
+    $(document).ready(function () {
+        $(".tab_3").owlCarousel({
+            items: 4,
+            responsive: {
+                1024: {
+                    items: 2.7
+                },
+            },
+            dots: false,
+            stagePadding: true,
+            center: true,
+            loop: true,
+            startPosition: 0,
+            autoplay: true,
+            autoplayTimeout: {{$speed_for_small}},
+        });
+        $("#carousel").owlCarousel({
+            items: 1,
+            responsive: {
+                0: {
+                    items: 1
+                },
+            },
+            navigation: false,
+            slideSpeed: 500,
+            paginationSpeed: 800,
+            rewindSpeed: 1000,
+            singleItem: true,
+            autoPlay: true,
+            stopOnHover: true,
+            center: true,
+            loop: true,
+            autoplay: true,
+            autoplayTimeout: {{$speed_for_big}},
+        });
+        $("#carousel_ipad").owlCarousel({
+            items: 1,
+            responsive: {
+                0: {
+                    items: 1
+                },
+            },
+            navigation: false,
+            slideSpeed: 500,
+            paginationSpeed: 800,
+            rewindSpeed: 1000,
+            singleItem: true,
+            autoPlay: true,
+            stopOnHover: true,
+            center: true,
+            loop: true,
+            autoplay: true,
+            autoplayTimeout: {{$speed_for_big}},
+        });
+    });
+</script>
 </body>
 
 </html>
