@@ -20,3 +20,4 @@
         </div>
     </div>
 @endforeach
+{{$all_games->links()}}
