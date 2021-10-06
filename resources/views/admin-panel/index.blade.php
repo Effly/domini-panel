@@ -5,6 +5,13 @@
 @section('body')
 
     <div class="sort row row-cols-1 row-cols-md-3 g-4" style="border-bottom: #1a202c 1px solid">
+        <div class="container-fluid d-flex align-items-center">
+            <form class="d-flex">
+                <input class="form-control  me-2" data="sort" type="search" name="search_text" placeholder="Search"
+                       aria-label="Search">
+
+            </form>
+        </div>
         <div class="col">
             <div class=" card text-dark bg-light mb-3" style="max-width: 18rem;">
                 <h5 class="card-header">Platform</h5>
@@ -77,36 +84,41 @@
         </div>
 
     </div>
-    <div class="row row-cols-1 row-cols-md-3 g-4" id="games">
-        @foreach($all_games as $game)
-
-            <div class="col">
-                <div class="card" style="width: 18rem;">
-                    <img src="{{asset('storage/'.$game->image_name)}}" class="card-img-top" alt="{{$game->tech_name}}">
-                    <div class="card-body">
-                        <h5 class="card-title">{{$game->tech_name}}</h5>
-                        <p class="card-text">{{$game->name}}</p>
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item">{{$game->slider}} slider</li>
-                            <li class="list-group-item">{{$game->published}} published</li>
-                            <li class="list-group-item">{{$game->version}} version</li>
-                            <li class="list-group-item">{{$game->platform}} platform</li>
-                        </ul>
+    <div class="row row-cols-1 row-cols-md-3 g-4" id="games1">
+        <div id="games">
+            @foreach($all_games as $game)
+                <div class="col">
+                    <div class="card" style="width: 18rem;">
+                        <img src="{{asset('storage/'.$game->image_name)}}" class="card-img-top"
+                             alt="{{$game->tech_name}}">
                         <div class="card-body">
-                            <a href="{{route('show',['id'=>$game->id])}}" class="card-link">edit</a>
-                            <a href="{{route('delete',['id'=>$game->id])}}" class="card-link">delete</a>
+                            <h5 class="card-title">{{$game->tech_name}}</h5>
+                            <p class="card-text">{{$game->name}}</p>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">{{$game->slider}} slider</li>
+                                <li class="list-group-item">{{$game->published}} published</li>
+                                <li class="list-group-item">{{$game->version}} version</li>
+                                <li class="list-group-item">{{$game->platform}} platform</li>
+                            </ul>
+                            <div class="card-body">
+                                <a href="{{route('show',['id'=>$game->id])}}" class="card-link">edit</a>
+                                <a href="{{route('delete',['id'=>$game->id])}}" class="card-link">delete</a>
+                            </div>
+                            <p class="card-text"><small class="text-muted">Last updated {{$game->updated_at}}</small>
+                            </p>
                         </div>
-                        <p class="card-text"><small class="text-muted">Last updated {{$game->updated_at}}</small></p>
                     </div>
                 </div>
-            </div>
-        @endforeach
+            @endforeach
+            {{$all_games->links()}}
+        </div>
     </div>
 
 @endsection
 
 @section('script')
-<script>
-    let route = "{{route('root')}}"
-</script>
+    <script>
+        {{--let routeSearch = "{{route('search')}}"--}}
+        let route = "{{route('root')}}"
+    </script>
 @endsection
