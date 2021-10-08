@@ -84,8 +84,8 @@
         </div>
 
     </div>
-    <div class="row row-cols-1 row-cols-md-3 g-4" id="games1">
-        <div id="games">
+    <div class="row row-cols-1 row-cols-md-3 g-4" id="games">
+{{--        <div id="games">--}}
             @foreach($all_games as $game)
                 <div class="col">
                     <div class="card" style="width: 18rem;">
@@ -111,7 +111,7 @@
                 </div>
             @endforeach
             {{$all_games->links()}}
-        </div>
+{{--        </div>--}}
     </div>
 
 @endsection
