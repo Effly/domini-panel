@@ -49,7 +49,7 @@
                                 @if(!empty($data_for_big))
                                     @foreach($data_for_big as $slide)
                                         <div class="main__wrapper-content-slider">
-                                            <a href="{{$slide['game']['link']}}" target="_blank">
+                                            <a href="{{$slide['game']['link'] ?? ''}}" target="_blank">
                                                 @if($version)
                                                     <img src="{{asset('storage/'.$slide['game']['image_name_ipad'])}}"
                                                          alt="Img">
@@ -73,7 +73,7 @@
                                 @endif
                             </div>
 
-                            <!-- ПЛАНШЕТ -->
+                            <!-- TABLETS -->
                             <div id="carousel_ipad" class="owl-carousel owl-theme">
                                 @if(!empty($data_for_big))
                                     @foreach($data_for_big as $slide)
@@ -106,7 +106,7 @@
                         </article>
                     </div>
 
-                    <!-- РАЗДЕЛИТЕЛЬ -->
+                    <!--SEPARATOR -->
                     <div class="row">
                         <div class="col-xl-12 social">
                             <p class="social__text">{!! $data_for_separator->html_text !!}</p>
@@ -160,64 +160,11 @@
         </div>
     </div>
 </div>
-<script src="{{asset('js/script.js')}}"></script>
 <script>
-    $(document).ready(function () {
-        $(".tab_3").owlCarousel({
-            items: 4,
-            responsive: {
-                1024: {
-                    items: 2.7
-                },
-            },
-            dots: false,
-            stagePadding: true,
-            center: true,
-            loop: true,
-            startPosition: 0,
-            autoplay: true,
-            autoplayTimeout: {{$speed_for_small}},
-        });
-        $("#carousel").owlCarousel({
-            items: 1,
-            responsive: {
-                0: {
-                    items: 1
-                },
-            },
-            navigation: false,
-            slideSpeed: 500,
-            paginationSpeed: 800,
-            rewindSpeed: 1000,
-            singleItem: true,
-            autoPlay: true,
-            stopOnHover: true,
-            center: true,
-            loop: true,
-            autoplay: true,
-            autoplayTimeout: {{$speed_for_big}},
-        });
-        $("#carousel_ipad").owlCarousel({
-            items: 1,
-            responsive: {
-                0: {
-                    items: 1
-                },
-            },
-            navigation: false,
-            slideSpeed: 500,
-            paginationSpeed: 800,
-            rewindSpeed: 1000,
-            singleItem: true,
-            autoPlay: true,
-            stopOnHover: true,
-            center: true,
-            loop: true,
-            autoplay: true,
-            autoplayTimeout: {{$speed_for_big}},
-        });
-    });
+    var speed_small = {{$speed_for_small}};
+    var speed_big = {{$speed_for_big}};
 </script>
+<script src="{{asset('js/script.js')}}"></script>
 </body>
 
 </html>

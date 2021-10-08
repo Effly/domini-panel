@@ -8,7 +8,7 @@
         <div class="col">
             <div class="card text-dark bg-light mb-12">
                 <form action="{{route('separator-update')}}" method="get" enctype="multipart/form-data">
-                    <div id="summernote"></div>
+                    <p id="summernote"></p>
                     <button class="btn btn-primary" id="submit">Отправить</button>
                 </form>
             </div>
@@ -72,9 +72,22 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+{{--    <script src="{{asset('js/summernote-ext-addclass.js')}}"></script>--}}
     <script>
         $(document).ready(function () {
-            $('#summernote').summernote('code', "{!! $separator->html_text !!}");
+            $('#summernote').summernote({
+
+                toolbar: [
+                    ['style', ['bold', 'italic', 'underline', 'clear']],
+                    ['font', ['strikethrough', 'superscript', 'subscript']],
+                    // ['fontsize', ['fontsize']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['height', ['height']]
+                ],
+            })
+            $('#summernote').summernote('code', '{!! $separator->html_text !!}')
+
         });
         let routeSubmit = '{{route('separator-update')}}'
     </script>
