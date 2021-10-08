@@ -24,9 +24,9 @@ class SlidersController extends Controller
         $speed_big = $settings->where('name', 'big')->first()->speed;
         $speed_small = $settings->where('name', 'small')->first()->speed;
         $labels = [
-            'top_rated'=>Storage::disk('public')->exists('labels/top_rated/top_rated.png'),
-            'hot_realese'=>Storage::disk('public')->exists('labels/hot_realese/hot_realese.png'),
-            'friends_favorite'=>Storage::disk('public')->exists('labels/friends_favorite/friends_favorite.png'),
+            'top_rated'=>Storage::disk('public')->exists('labels/top_rated.png'),
+            'hot_realese'=>Storage::disk('public')->exists('labels/hot_realese.png'),
+            'friends_favorite'=>Storage::disk('public')->exists('labels/friends_favorite.png'),
 
             '15'=>Storage::disk('public')->exists('labels/15.png'),
             '25'=>Storage::disk('public')->exists('labels/25.png'),
