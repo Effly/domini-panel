@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Separator;
-use App\Models\Version;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -50,7 +49,7 @@ class SeparatorController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request,Separator $separator,Version $version)
+    public function update(Request $request,Separator $separator)
     {
         $data = [];
         if ($request->hasFile('inst_image')){
@@ -73,7 +72,6 @@ class SeparatorController extends Controller
 
         $check = $separator->where('id',1)->update($data);
 //        dd($check);
-        $version->patchVersion();
         return redirect('/separator')->with('update', 'The separator was successfully updated');
     }
 

@@ -2,14 +2,12 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Version;
 use App\Models\Games;
 use http\Env\Request;
 use Illuminate\Console\Command;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Exception\ClientException;
-
 class Test extends Command
 {
     /**
@@ -41,16 +39,23 @@ class Test extends Command
      *
      * @return int
      */
-    public function handle(Version $version)
+    public function handle()
     {
-        $str = 'com.dominigames.bruh.cc12.blah.fremium';
-        if (stripos($str,'free2play') || stripos($str,'f2p')){
-            $gameVersion = 'free';
-        }else $gameVersion = 'prem';
+        $client = new Client([
+            'header' => [
+                'Accept' => 'application/json',
+                'Content-Type' => 'application/x-www-form-urlencoded'
+            ],
+            'verify' => false,
+            'http_errors'=> true
+        ]);
 
-        $str = explode('com.dominigames.',$str);
-        dd(explode('.',$str[1]));
-        $tech_name = $str;
+//        $response = $client->get('https://laravel.com/87543');
+        try {
+            $client->request('GET', 'https://github.com/_abc_123_404');
+        } catch (ClientException $e) {
+            dd($e->getCode());
+        }
     }
 }
 

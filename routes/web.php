@@ -21,14 +21,9 @@ use App\Http\Controllers\MainPageController;
 //    return view('welcome');
 //});
 Auth::routes(['register'=>false]);
-//Auth::routes();
-//admin@admin.domini.net
-//88domini8%8GameS88
-//Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::post('/', [MainPageController::class,'index'])->name('welcome');
-Route::post('/checkVersionMoregames', [MainPageController::class,'getVersionByTechName'])->name('get-version');
-Route::get('/test/moregames', [MainPageController::class,'forTest'])->name('forTest');
 
+//Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/', [MainPageController::class,'index'])->name('welcome');
 Route::middleware('auth')->group(function (){
     Route::get('/admin',[AdminController::class,'index'])->name('root');
     Route::get('/create-page',[AdminController::class,'show_create_page'])->name('show_create_page');
