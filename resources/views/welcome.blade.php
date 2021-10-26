@@ -1,4 +1,13 @@
-<!DOCTYPE html>
+{{--@foreach($data_for_big as $slide)--}}
+{{--@if($loop->iteration == $slide->slot)--}}
+{{--    {{dump($slide->name)}}--}}
+{{--@else--}}
+{{--{{dump($slide->slot)}}--}}
+{{--        @endif--}}
+{{--@endforeach--}}
+{{--{{die()}}--}}
+
+        <!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -48,27 +57,34 @@
                             <div id="carousel" class="owl-carousel owl-theme">
                                 @if(!empty($data_for_big))
                                     @foreach($data_for_big as $slide)
-                                        <div class="main__wrapper-content-slider">
-                                            <a href="{{$slide['game']['link'] ?? ''}}" target="_blank">
-                                                @if($version)
-                                                    <img src="{{asset('storage/'.$slide['game']['image_name_ipad'])}}"
-                                                         alt="Img">
-                                                    @if($slide['label']!= "NULL")
-                                                        <img class="label img-fluid"
-                                                             src="{{asset('storage/labels/free_big.png')}}"
+                                        @if($loop->iteration == $slide->slot)
+                                            <div class="main__wrapper-content-slider">
+                                                <a href="{{$slide->link ?? ''}}" target="_blank">
+                                                    @if($version)
+                                                        <img src="{{asset('storage/'.$slide->image_name_ipad)}}"
                                                              alt="Img">
-                                                    @endif
-                                                @else
-                                                    <img src="{{asset('storage/'.$slide['game']['image_name'])}}"
-                                                         alt="Img">
-                                                    @if($slide['label']!= "NULL")
-                                                        <img class="label img-fluid"
-                                                             src="{{asset('storage/labels/free_big.png')}}"
+                                                        @if($slide->rate != "NULL")
+                                                            @if(!is_null($slide->rate))
+                                                                <img class="label img-fluid"
+                                                                     src="{{asset('storage/labels/free_big.png')}}"
+                                                                     alt="Img">
+                                                            @endif
+
+                                                        @endif
+                                                    @else
+                                                        <img src="{{asset('storage/'.$slide->image_name)}}"
                                                              alt="Img">
+                                                        @if($slide->rate != "NULL")
+                                                            @if(!is_null($slide->rate))
+                                                                <img class="label img-fluid"
+                                                                     src="{{asset('storage/labels/free_big.png')}}"
+                                                                     alt="Img">
+                                                            @endif
+                                                        @endif
                                                     @endif
-                                                @endif
-                                            </a>
-                                        </div>
+                                                </a>
+                                            </div>
+                                        @endif
                                     @endforeach
                                 @endif
                             </div>
@@ -77,30 +93,35 @@
                             <div id="carousel_ipad" class="owl-carousel owl-theme">
                                 @if(!empty($data_for_big))
                                     @foreach($data_for_big as $slide)
-                                        <div class="main__wrapper-content-slider">
-                                            <a class="d-block link_img" href="{{$slide['game']['link']}}"
-                                               target="_blank">
-                                                @if($version)
-                                                    <img src="{{asset('storage/'.$slide['game']['image_name_ipad'])}}"
-                                                         alt="Img">
-                                                    @if($slide['label']!= "NULL")
-                                                        <img class="label img-fluid"
-                                                             src="{{asset('storage/labels/free_big_ipad.png')}}"
+                                        @if($loop->iteration == $slide->slot)
+                                            <div class="main__wrapper-content-slider">
+                                                <a class="d-block link_img" href="{{$slide->link  ?? ''}}"
+                                                   target="_blank">
+                                                    @if($version)
+                                                        <img src="{{asset('storage/'.$slide->image_name_ipad ?? '')}}"
                                                              alt="Img">
-                                                    @endif
-                                                @else
-                                                    <img src="{{asset('storage/'.$slide['game']['image_name'])}}"
-                                                         alt="Img">
-                                                    @if($slide['label']!= "NULL")
-                                                        <img class="label img-fluid"
-                                                             src="{{asset('storage/labels/free_big.png')}}"
+                                                        @if($slide->rate != "NULL")
+                                                            @if(!is_null($slide->rate))
+                                                                <img class="label img-fluid"
+                                                                     src="{{asset('storage/labels/free_big_ipad.png') ?? ''}}"
+                                                                     alt="Img">
+                                                            @endif
+                                                        @endif
+                                                    @else
+                                                        <img src="{{asset('storage/'.$slide->image_name) ?? ''}}"
                                                              alt="Img">
+                                                        @if($slide->rate != "NULL")
+                                                            @if(!is_null($slide->rate))
+                                                                <img class="label img-fluid"
+                                                                     src="{{asset('storage/labels/free_big.png') ?? ''}}"
+                                                                     alt="Img">
+                                                            @endif
+                                                        @endif
                                                     @endif
-                                                @endif
-                                            </a>
-                                        </div>
+                                                </a>
+                                            </div>
+                                        @endif
                                     @endforeach
-
                                 @endif
                             </div>
                         </article>
@@ -111,15 +132,16 @@
                         <div class="col-xl-12 social">
                             <p class="social__text">{!! $data_for_separator->html_text !!}</p>
                             <div class="facebook">
-                                <a href="{{$data_for_separator->facebook_link}}" target="_blank">
+                                <a href="{{$data_for_separator->facebook_link  ?? ''}}" target="_blank">
                                     <img class="social__logo img-fluid"
-                                         src="{{asset('storage/'.$data_for_separator->path_facebook_img)}}" alt="#"/>
+                                         src="{{asset('storage/'.$data_for_separator->path_facebook_img) ?? ''}}"
+                                         alt="#"/>
                                 </a>
                             </div>
                             <div class="inst">
-                                <a href="{{$data_for_separator->inst_link}}" target="_blank">
+                                <a href="{{$data_for_separator->inst_link  ?? ''}}" target="_blank">
                                     <img class="social__logo img-fluid"
-                                         src="{{asset('storage/'.$data_for_separator->path_inst_img)}}" alt="#"/>
+                                         src="{{asset('storage/'.$data_for_separator->path_inst_img) ?? ''}}" alt="#"/>
                                 </a>
                             </div>
                         </div>
@@ -132,21 +154,21 @@
                                 @if(!empty($data_for_small))
                                     @foreach($data_for_small as $slide)
                                         <div class="main__wrapper-content-item">
-                                            <a class="d-block link_img" href="{{$slide['game']['link']}}"
+                                            <a class="d-block link_img" href="{{$slide->link  ?? ''}}"
                                                target="_blank">
                                                 <img class="img-fluid"
-                                                     src="{{asset('storage/'.$slide['game']['image_name'])}}" alt="Img">
-                                                @if($slide['rate'] != "NULL")
+                                                     src="{{asset('storage/'.$slide->image_name) ?? ''}}" alt="Img">
+                                                @if($slide->rate != "NULL")
                                                     <img class="rate img-fluid"
-                                                         src="{{asset('storage/labels/'.$slide['rate'].'.png')}}"
+                                                         src="{{asset('storage/labels/'.$slide->rate.'.png') ?? ''}}"
                                                          alt="Img">
                                                 @endif
                                                 @if($slide['label']!= "NULL")
                                                     <img class="label img-fluid"
-                                                         src="{{asset('storage/labels/'.$slide['label'].'.png')}}"
+                                                         src="{{asset('storage/labels/'.$slide->label.'.png') ?? ''}}"
                                                          alt="Img">
                                                 @endif
-                                                <p class="wrapper__content-item-text">{{$slide['game']['name']}}</p>
+                                                <p class="wrapper__content-item-text">{{$slide->name ?? ''}}</p>
                                             </a>
                                         </div>
                                     @endforeach

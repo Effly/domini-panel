@@ -51,8 +51,8 @@
                     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="nav justify-content-center">
+            <div class="collapse  navbar-collapse" id="navbarNav">
+                <ul class="nav">
 
                     @guest
                         @if (Route::has('login'))
@@ -76,7 +76,7 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{url()->previous()}}">Back</a>
                         </li>
-                        <div class="dropdown">
+                        <div class="dropdown d-flex justify-content-sm-end">
                             <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
                                data-bs-toggle="dropdown" aria-expanded="false">
                                 {{ Auth::user()->name }}
