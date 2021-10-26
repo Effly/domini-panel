@@ -20,9 +20,9 @@ class DatabaseSeeder extends Seeder
         $this->call(
             SlidesSeeder::class
         );
-        $this->call(
-            GamesSeeder::class
-        );
+//        $this->call(
+//            GamesSeeder::class
+//        );
         $this->call(
             UserSeeder::class
         );

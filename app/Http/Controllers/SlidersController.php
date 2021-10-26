@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Games;
 use App\Models\Settings;
+use App\Models\Version;
 use App\Models\Slides;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -86,7 +87,7 @@ class SlidersController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Slides $slide)
+    public function update(Request $request, Slides $slide,Version $version)
     {
 //        dd($request->all());
 
@@ -95,6 +96,7 @@ class SlidersController extends Controller
             'label' => $request->label,
             'rate' => $request->rate
         ]);
+        $version->patchVersion();
         return redirect('/sliders')->with('update', 'The slide was successfully updated');
     }
 
@@ -109,15 +111,17 @@ class SlidersController extends Controller
         //
     }
 
-    public function updateSpeed(Request $request, Settings $setting)
+    public function updateSpeed(Request $request, Settings $setting,Version $version)
     {
         $setting->where('name', $request->slider)->update(['speed' => $request->speed]);
+        $version->patchVersion();
         return redirect('/sliders')->with('update', 'The slider-speed was successfully updated');
     }
 
-    public function updateLabel(Request $request)
+    public function updateLabel(Request $request,Version $version)
     {
         $path = Storage::disk('public')->putFileAs('labels', $request->file('img'), $request->label_name . '.png');
+        $version->patchVersion();
         return redirect('/sliders')->with('update', 'The slide-label was successfully updated');
     }
 }

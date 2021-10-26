@@ -57,17 +57,20 @@ $(document).ready(function () {
 let check_big = $("#big")
 let check_small = $("#small")
 let file_for_ipad = $("#block_image_for_ipad")
+
+
+
 check_big.click(function () {
     if ($(this).is(':checked')) {
-        // console.log('check')
         file_for_ipad.fadeIn();
 
+        // slot_small.fadeOut();
+        //select ios big in
     }
 });
 check_small.click(function (){
     if ($(this).is(':checked')) {
         file_for_ipad.fadeOut();
-        // console.log('nocheck')
 
     }
 })
@@ -329,21 +332,52 @@ elsSubmit.on("click", function (e) {
 let check_big_update = $("#big")
 let check_small_update = $("#small")
 let file_for_ipad_update = $("#block_image_for_ipad")
+let slot_big = $("#slot_big")
+let slot_small = $("#slot_small")
+let rate_small = $("#rate_small")
+let rate_big = $("#rate_big")
+let label_small = $("#label_small")
+
 if (check_big_update.is(':checked')){
     file_for_ipad_update.fadeIn();
-}
+    slot_big.fadeIn()
+    rate_big.fadeIn()
+    slot_big.fadeIn()
 
+}
+if (check_small_update.is(':checked')){
+    console.log(slot_small)
+    slot_small.fadeIn()
+    rate_big.fadeIn()
+    rate_small.fadeIn()
+    label_small.fadeIn()
+}
 
 check_big_update.click(function () {
     if ($(this).is(':checked')) {
         // console.log('check')
         file_for_ipad_update.fadeIn();
+        slot_big.fadeIn()
+        slot_small.fadeOut()
+
+
+        rate_small.fadeOut()
+        rate_big.fadeIn()
+        label_small.fadeOut()
+
     }
 });
 check_small_update.click(function (){
     if ($(this).is(':checked')) {
         file_for_ipad_update.fadeOut();
-        // console.log('nocheck')
+        slot_big.fadeOut()
+        slot_small.fadeIn()
+
+        rate_big.fadeOut()
+        rate_small.fadeIn()
+
+        label_small.fadeIn()
+        // console.log(label_small)
     }
 })
 // End show page

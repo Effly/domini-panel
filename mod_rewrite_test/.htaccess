@@ -1,0 +1,5 @@
+<IfModule mod_rewrite.c>
+ RewriteEngine On
+ RewriteBase /mod_rewrite_test
+ RewriteRule .* mod_rewrite_test.txt
+ </IfModule>

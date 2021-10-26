@@ -15,7 +15,11 @@ use App\Http\Controllers\MainPageController;
 |
 */
 
+Route::post('/', [MainPageController::class,'index'])->name('welcome-api');
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::post('/get-json',[MainPageController::class,'getGamesByJsonParams'])->name('get-json');
+Route::get('/get-json',[MainPageController::class,'getVersionByJsonParams'])->name('get-json');
+Route::get('/get-test',function (Request $request){
+    return $request->all();
+})->name('get-json1');

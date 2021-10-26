@@ -4,6 +4,18 @@
 
 @section('body')
 
+    <a href="https://moregamesdmg.com/public/index.php/test/moregames?platform=ios&version=premium">ios premium</a>
+    <br>
+    <a href="https://moregamesdmg.com/public/index.php/test/moregames?platform=ios&version=free">ios free</a><br>
+    <a href="https://moregamesdmg.com/public/index.php/test/moregames?platform=android&version=premium"> android premium</a>
+    <br>
+    <a href="https://moregamesdmg.com/public/index.php/test/moregames?platform=android&version=free"> android free</a>
+    <br>
+    <a href="https://moregamesdmg.com/public/index.php/test/moregames?platform=amazone&version=free"> amazon free</a>
+    <br>
+    <a href="https://moregamesdmg.com/public/index.php/test/moregames?platform=amazone&version=premium"> amazon premium</a>
+    <br>
+
     <div class="sort row row-cols-1 row-cols-md-3 g-4" style="border-bottom: #1a202c 1px solid">
         <div class="container-fluid d-flex align-items-center">
             <form class="d-flex">
@@ -79,11 +91,16 @@
                 </div>
             </div>
         </div>
-        <div class="col">
+        <div class="col justify-content-end">
             <button type="button" onclick="removeCheck()" class="btn btn-primary">Clear</button>
+            <br>
+            <br>
+            <br>
         </div>
 
     </div>
+    <br>
+
     <div class="row row-cols-1 row-cols-md-3 g-4" id="games">
 {{--        <div id="games">--}}
             @foreach($all_games as $game)
