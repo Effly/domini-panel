@@ -15,7 +15,7 @@
 
             <label class="col-sm-2 col-form-label" for="title">Game tech name</label>
             <div class="col-sm-10">
-                <input type="text" class="form-control" id="title" value="{{$data->tech_name}}" name="tech_name">
+                <input type="text" class="form-control" readonly id="title" value="{{$data->tech_name}}" name="tech_name">
             </div>
         </div>
         <fieldset class="platform row mb-3">
