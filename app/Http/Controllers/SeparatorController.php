@@ -4,11 +4,24 @@ namespace App\Http\Controllers;
 
 use App\Models\Separator;
 use App\Models\Version;
+use App\Services\SeparatorCollectDataService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class SeparatorController extends Controller
 {
+
+    /**
+     * @var SeparatorCollectDataService
+     */
+    private $separatorCollectDataService;
+
+    public function __construct(SeparatorCollectDataService $separatorCollectDataService)
+    {
+        $this->separatorCollectDataService = $separatorCollectDataService;
+    }
+
+
     /**
      * Display a listing of the resource.
      *
@@ -16,9 +29,8 @@ class SeparatorController extends Controller
      */
     public function index(Separator $separator)
     {
-        $separator = $separator->where('id',1)->first();
-//        dd($separator->html_text);
-        return view('admin-panel.separator',['separator'=>$separator]);
+
+        return view('admin-panel.separator',['separator'=>$separator->where('id',1)->first()]);
     }
 
     /**
@@ -52,27 +64,9 @@ class SeparatorController extends Controller
      */
     public function update(Request $request,Separator $separator,Version $version)
     {
-        $data = [];
-        if ($request->hasFile('inst_image')){
-            $path = Storage::disk('public')->putFileAs('src',$request->file('inst_image'),'inst_image.svg');
-            $data['path_inst_img'] = $path;
-        }
-        if ($request->hasFile('facebook_image')){
-            $path = Storage::disk('public')->putFileAs('src',$request->file('facebook_image'),'facebook_image.svg');
-            $data['path_facebook_img'] = $path;
-        }
-        if ($request->has('inst_link')){
-            $data['inst_link'] = $request->inst_link;
-        }
-        if ($request->has('facebook_link')){
-            $data['facebook_link'] = $request->facebook_link;
-        }
-        if ($request->has('data')){
-            $data['html_text'] = $request->data;
-        }
 
-        $check = $separator->where('id',1)->update($data);
-//        dd($check);
+
+        $separator->where('id',1)->update($this->separatorCollectDataService->setAllData($request));
         $version->patchVersion();
         return redirect('/separator')->with('update', 'The separator was successfully updated');
     }
