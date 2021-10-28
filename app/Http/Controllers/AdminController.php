@@ -28,22 +28,26 @@ class AdminController extends Controller
      * @var AdminLinkCheckService
      */
     private $adminLinkCheckService;
-
-
     /**
      * @var AdminCollectGameData
      */
     private $adminCollectGameData;
+    /**
+     * @var FileManipulationService
+     */
+    private $fileManipulationService;
 
 
     /**
      * @param AdminLinkCheckService $adminLinkCheckService
      * @param AdminCollectGameData $adminCollectGameData
+     * @param FileManipulationService $fileManipulationService
      */
-    public function __construct(AdminLinkCheckService $adminLinkCheckService, AdminCollectGameData $adminCollectGameData)
+    public function __construct(AdminLinkCheckService $adminLinkCheckService, AdminCollectGameData $adminCollectGameData, FileManipulationService $fileManipulationService)
     {
         $this->adminLinkCheckService = $adminLinkCheckService;
         $this->adminCollectGameData = $adminCollectGameData;
+        $this->fileManipulationService = $fileManipulationService;
     }
 
 
@@ -54,42 +58,12 @@ class AdminController extends Controller
      */
     public function index(Request $request, Games $games)
     {
-        $all_games = $games->paginate(20);
-        $path = Storage::disk()->url('Images');
-//        if(isset($request->value)) $all_games = $games->where('slider','big')->get();
-
-        $platform = $request->platform;
-        $version = $request->version;
-        $slider = $request->slider;
-        $published = $request->published;
-        $sort_date = $request->sort_date;
-        $search_text = $request->search_text;
         //Start ajax sort
         if ($request->ajax()) {
-            $all_games = $games->when(!empty($platform), function ($query) use ($platform) {
-                $query->whereIn('platform', $platform);
-            })->when(!empty($version), function ($query) use ($version) {
-                $query->whereIn('version', $version);
-            })->when(!empty($slider), function ($query) use ($slider) {
-                $query->whereIn('slider', $slider);
-            })->when(!empty($published), function ($query) use ($published) {
-                $query->whereIn('published', $published);
-            })->when(!empty($sort_date), function ($query) use ($sort_date) {
-                if ($sort_date[0] == 'desc') $query->orderBy('updated_at', 'DESC');
-                elseif ($sort_date[0] == 'asc') $query->orderBy('updated_at', 'ASC');
-            })->when(!empty($search_text), function ($query) use ($search_text) {
-                $query->where('name', 'LIKE', '%' . $search_text[0] . "%");
-            })
-                ->paginate(20);
-//                ->get();
-
-
-            return view('layouts.games', ['all_games' => $all_games, 'path' => $path])->render();
-            //end aja sort
+            return view('layouts.games', ['all_games' =>  $this->adminCollectGameData->sortDataAjax($games,$request), 'path' => $this->fileManipulationService->getPublicDirPath('Images')])->render();
         }
-//        dd($all_games[0]->name);
-        return view('admin-panel.index', ['all_games' => $all_games, 'path' => $path]);
-
+        //end ajax sort
+        return view('admin-panel.index', ['all_games' => $games->paginate(20), 'path' => $this->fileManipulationService->getPublicDirPath('Images')]);
     }
 
 
@@ -101,9 +75,6 @@ class AdminController extends Controller
      */
     public function store(AdminStoreRequest $request, Games $game, Version $version)
     {
-
-//        dd($data);
-
         $game->create($this->adminCollectGameData->setAllData($request->validated()));
         $version->patchVersion();
         return redirect('/admin')->with('create', 'The game with the name ' . $request->validated()['name'] . ' was successfully created');
@@ -117,8 +88,7 @@ class AdminController extends Controller
      */
     public function show(Games $game, $id)
     {
-        $exist = Storage::disk('public')->has($game->getDataGameById($id)->image_name);
-        return view('admin-panel.show', ['data' => $game->getDataGameById($id), 'exist' => $exist]);
+        return view('admin-panel.show', ['data' => $game->getDataGameById($id), 'exist' => $this->fileManipulationService->hasFileDir($id)]);
 
     }
 
@@ -131,7 +101,6 @@ class AdminController extends Controller
      */
     public function update(Games $game, AdminUpdateRequest $request, Version $version)
     {
-
         $version->patchVersion();
         return redirect('/admin')->with('update', 'The game with the name ' . $game->updateGame($this->adminCollectGameData->setAllData($request->validated()), $request->validated()['id']) . ' was successfully updated');
     }
@@ -165,7 +134,6 @@ class AdminController extends Controller
      */
     public function imageCheck(Request $request)
     {
-//        dd($request->all());
         $messages = [
             'image.dimensions' => 'The image does not match the aspect ratio for the selected slider',
             'image.max' => 'The image must be no more than 2 megabytes in size',
@@ -198,7 +166,6 @@ class AdminController extends Controller
     {
         return view('layouts.link', ['error' => $this->adminLinkCheckService->checkLink($request->link)]);
     }
-//'https://github.com/_abc_123_404'
-//,Version $version
+
 
 }
